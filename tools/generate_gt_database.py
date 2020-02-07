@@ -59,7 +59,7 @@ class GTDatabaseGenerator(KittiDataset):
             pts_intensity = pts_lidar[:, 3]
 
             obj_list = self.filtrate_objects(self.get_label(sample_id))
-            print(f'After Filtration, obj_list contains {len(obj)} objects')
+            print(f'After Filtration, obj_list contains {len(obj_list)} objects')
             print(obj_list.__len__())
 
             gt_boxes3d = np.zeros((obj_list.__len__(), 7), dtype=np.float32) # empty array with 7 features
