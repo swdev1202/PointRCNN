@@ -20,7 +20,7 @@ class GTDatabaseGenerator(KittiDataset):
         super().__init__(root_dir, split=split)
         self.gt_database = None
         if classes == 'Car':
-            self.classes = ('Background', 'Car')
+            self.classes = ('Background', 'VEHICLE')
         elif classes == 'People':
             self.classes = ('Background', 'Pedestrian', 'Cyclist')
         elif classes == 'Pedestrian':
@@ -60,10 +60,10 @@ class GTDatabaseGenerator(KittiDataset):
 
             obj_list = self.filtrate_objects(self.get_label(sample_id))
 
-            gt_boxes3d = np.zeros((obj_list.__len__(), 7), dtype=np.float32)
+            gt_boxes3d = np.zeros((obj_list.__len__(), 7), dtype=np.float32) # empty array with 7 features
             for k, obj in enumerate(obj_list):
                 gt_boxes3d[k, 0:3], gt_boxes3d[k, 3], gt_boxes3d[k, 4], gt_boxes3d[k, 5], gt_boxes3d[k, 6] \
-                    = obj.pos, obj.h, obj.w, obj.l, obj.ry
+                    = obj.pos, obj.h, obj.w, obj.l, obj.ry # (x,y,z) , (h,w,l), rotation_y
 
             if gt_boxes3d.__len__() == 0:
                 print('No gt object')
