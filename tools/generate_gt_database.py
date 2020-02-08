@@ -20,7 +20,7 @@ class GTDatabaseGenerator(KittiDataset):
         super().__init__(root_dir, split=split)
         self.gt_database = None
         if classes == 'Car':
-            self.classes = ('Background', 'VEHICLE')
+            self.classes = ('Background', 'Car')
         elif classes == 'People':
             self.classes = ('Background', 'Pedestrian', 'Cyclist')
         elif classes == 'Pedestrian':
