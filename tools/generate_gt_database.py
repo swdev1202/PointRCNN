@@ -9,6 +9,7 @@ from lib.datasets.kitti_dataset import KittiDataset
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--root_dir', type=str, default='/home/011505052/argoverse-conv-rect-data/')
 parser.add_argument('--save_dir', type=str, default='./gt_database')
 parser.add_argument('--class_name', type=str, default='Car')
 parser.add_argument('--split', type=str, default='train')
@@ -90,11 +91,11 @@ class GTDatabaseGenerator(KittiDataset):
             pickle.dump(gt_database, f)
 
         self.gt_database = gt_database
-        print('Save refine training sample info file to %s' % save_file_name)
+        print('Save refine training sample info file to %s' % save_file_name)x
 
 
 if __name__ == '__main__':
-    dataset = GTDatabaseGenerator(root_dir='../data/', split=args.split)
+    dataset = GTDatabaseGenerator(root_dir=args.root_dir, split=args.split)
     os.makedirs(args.save_dir, exist_ok=True)
 
     dataset.generate_gt_database()
