@@ -91,7 +91,7 @@ class GTDatabaseGenerator(KittiDataset):
             pickle.dump(gt_database, f)
 
         self.gt_database = gt_database
-        print('Save refine training sample info file to %s' % save_file_name)x
+        print('Save refine training sample info file to %s' % save_file_name)
 
 
 if __name__ == '__main__':
