@@ -9,7 +9,7 @@ from lib.datasets.kitti_dataset import KittiDataset
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--root_dir', type=str, default='/home/011505052/argoverse-conv-rect-data/')
+parser.add_argument('--root_dir', type=str, default='./../data/')
 parser.add_argument('--save_dir', type=str, default='./gt_database')
 parser.add_argument('--class_name', type=str, default='Car')
 parser.add_argument('--split', type=str, default='train')
