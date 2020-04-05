@@ -270,7 +270,7 @@ class KittiRCNNDataset(KittiDataset):
         pts_rect = pts_rect[pts_valid_flag][:, 0:3]
         pts_intensity = pts_intensity[pts_valid_flag]
 
-        if cfg.GT_AUG_ENABLED and self.mode == 'TRAIN':
+        if cfg.GT_AUG_ENABLED and self.mode == 'TRAIN': # default GT_AUG_ENABLED = False
             # all labels for checking overlapping
             all_gt_obj_list = self.filtrate_dc_objects(self.get_label(sample_id))
             all_gt_boxes3d = kitti_utils.objs_to_boxes3d(all_gt_obj_list)
@@ -333,7 +333,7 @@ class KittiRCNNDataset(KittiDataset):
         # data augmentation
         aug_pts_rect = ret_pts_rect.copy()
         aug_gt_boxes3d = gt_boxes3d.copy()
-        if cfg.AUG_DATA and self.mode == 'TRAIN':
+        if cfg.AUG_DATA and self.mode == 'TRAIN': # default AUG_DATA = True
             aug_pts_rect, aug_gt_boxes3d, aug_method = self.data_augmentation(aug_pts_rect, aug_gt_boxes3d, gt_alpha,
                                                                               sample_id)
             sample_info['aug_method'] = aug_method
@@ -372,7 +372,7 @@ class KittiRCNNDataset(KittiDataset):
             box_corners = gt_corners[k]
             fg_pt_flag = kitti_utils.in_hull(pts_rect, box_corners)
             fg_pts_rect = pts_rect[fg_pt_flag]
-            cls_label[fg_pt_flag] = 1
+            cls_label[fg_pt_flag] = 1 # foreground points that are flagged set to 1
 
             # enlarge the bbox3d, ignore nearby points
             extend_box_corners = extend_gt_corners[k]
@@ -517,13 +517,13 @@ class KittiRCNNDataset(KittiDataset):
         :param gt_alpha: (N)
         :return:
         """
-        aug_list = cfg.AUG_METHOD_LIST
+        aug_list = cfg.AUG_METHOD_LIST # default AUG_METHOD_LIST: ['rotation', 'scaling', 'flip']
         aug_enable = 1 - np.random.rand(3)
         if mustaug is True:
             aug_enable[0] = -1
             aug_enable[1] = -1
         aug_method = []
-        if 'rotation' in aug_list and aug_enable[0] < cfg.AUG_METHOD_PROB[0]:
+        if 'rotation' in aug_list and aug_enable[0] < cfg.AUG_METHOD_PROB[0]: # default AUG_METHOD_PROB: [1.0, 1.0, 0.5]
             angle = np.random.uniform(-np.pi / cfg.AUG_ROT_RANGE, np.pi / cfg.AUG_ROT_RANGE)
             aug_pts_rect = kitti_utils.rotate_pc_along_y(aug_pts_rect, rot_angle=angle)
             if stage == 1:

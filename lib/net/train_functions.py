@@ -10,7 +10,7 @@ def model_joint_fn_decorator():
     ModelReturn = namedtuple("ModelReturn", ['loss', 'tb_dict', 'disp_dict'])
     MEAN_SIZE = torch.from_numpy(cfg.CLS_MEAN_SIZE[0]).cuda()
 
-    def model_fn(model, data):
+    def model_fn(model, data): # data = batch
         if cfg.RPN.ENABLED:
             pts_rect, pts_features, pts_input = data['pts_rect'], data['pts_features'], data['pts_input']
             gt_boxes3d = data['gt_boxes3d']
@@ -37,7 +37,7 @@ def model_joint_fn_decorator():
         tb_dict = {}
         disp_dict = {}
         loss = 0
-        if cfg.RPN.ENABLED and not cfg.RPN.FIXED:
+        if cfg.RPN.ENABLED and not cfg.RPN.FIXED: # Training mode default RPN
             rpn_cls, rpn_reg = ret_dict['rpn_cls'], ret_dict['rpn_reg']
             rpn_loss = get_rpn_loss(model, rpn_cls, rpn_reg, rpn_cls_label, rpn_reg_label, tb_dict)
             loss += rpn_loss

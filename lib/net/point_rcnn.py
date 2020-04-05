@@ -30,7 +30,7 @@ class PointRCNN(nn.Module):
             with torch.set_grad_enabled((not cfg.RPN.FIXED) and self.training):
                 if cfg.RPN.FIXED:
                     self.rpn.eval()
-                rpn_output = self.rpn(input_data)
+                rpn_output = self.rpn(input_data) # input_data => batch
                 output.update(rpn_output)
 
             # rcnn inference

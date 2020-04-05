@@ -18,26 +18,26 @@ class RPN(nn.Module):
 
         # classification branch
         cls_layers = []
-        pre_channel = cfg.RPN.FP_MLPS[0][-1]
-        for k in range(0, cfg.RPN.CLS_FC.__len__()):
+        pre_channel = cfg.RPN.FP_MLPS[0][-1] # [[128, 128], [256, 256], [512, 512], [512, 512]]
+        for k in range(0, cfg.RPN.CLS_FC.__len__()): # [128]
             cls_layers.append(pt_utils.Conv1d(pre_channel, cfg.RPN.CLS_FC[k], bn=cfg.RPN.USE_BN))
             pre_channel = cfg.RPN.CLS_FC[k]
         cls_layers.append(pt_utils.Conv1d(pre_channel, 1, activation=None))
-        if cfg.RPN.DP_RATIO >= 0:
+        if cfg.RPN.DP_RATIO >= 0: # DP_RATIO = 0.5 (default)
             cls_layers.insert(1, nn.Dropout(cfg.RPN.DP_RATIO))
         self.rpn_cls_layer = nn.Sequential(*cls_layers)
 
         # regression branch
-        per_loc_bin_num = int(cfg.RPN.LOC_SCOPE / cfg.RPN.LOC_BIN_SIZE) * 2
-        if cfg.RPN.LOC_XZ_FINE:
-            reg_channel = per_loc_bin_num * 4 + cfg.RPN.NUM_HEAD_BIN * 2 + 3
+        per_loc_bin_num = int(cfg.RPN.LOC_SCOPE / cfg.RPN.LOC_BIN_SIZE) * 2 # (3.0 / 0.5) * 2 = 12
+        if cfg.RPN.LOC_XZ_FINE: # LOC_XZ_FINE = True when training
+            reg_channel = per_loc_bin_num * 4 + cfg.RPN.NUM_HEAD_BIN * 2 + 3 # 12 * 4 + 12 = 48 + 12 = 60
         else:
-            reg_channel = per_loc_bin_num * 2 + cfg.RPN.NUM_HEAD_BIN * 2 + 3
+            reg_channel = per_loc_bin_num * 2 + cfg.RPN.NUM_HEAD_BIN * 2 + 3 # 12 * 2 + 12 = 36
         reg_channel += 1  # reg y
 
         reg_layers = []
-        pre_channel = cfg.RPN.FP_MLPS[0][-1]
-        for k in range(0, cfg.RPN.REG_FC.__len__()):
+        pre_channel = cfg.RPN.FP_MLPS[0][-1] # 128
+        for k in range(0, cfg.RPN.REG_FC.__len__()): # [128]
             reg_layers.append(pt_utils.Conv1d(pre_channel, cfg.RPN.REG_FC[k], bn=cfg.RPN.USE_BN))
             pre_channel = cfg.RPN.REG_FC[k]
         reg_layers.append(pt_utils.Conv1d(pre_channel, reg_channel, activation=None))
@@ -47,9 +47,9 @@ class RPN(nn.Module):
 
         if cfg.RPN.LOSS_CLS == 'DiceLoss':
             self.rpn_cls_loss_func = loss_utils.DiceLoss(ignore_target=-1)
-        elif cfg.RPN.LOSS_CLS == 'SigmoidFocalLoss':
+        elif cfg.RPN.LOSS_CLS == 'SigmoidFocalLoss': # default option
             self.rpn_cls_loss_func = loss_utils.SigmoidFocalClassificationLoss(alpha=cfg.RPN.FOCAL_ALPHA[0],
-                                                                               gamma=cfg.RPN.FOCAL_GAMMA)
+                                                                               gamma=cfg.RPN.FOCAL_GAMMA) # 0.25, 2.0
         elif cfg.RPN.LOSS_CLS == 'BinaryCrossEntropy':
             self.rpn_cls_loss_func = F.binary_cross_entropy
         else:

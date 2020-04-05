@@ -129,7 +129,7 @@ class Trainer(object):
         self.model.train()
 
         self.optimizer.zero_grad()
-        loss, tb_dict, disp_dict = self.model_fn(self.model, batch)
+        loss, tb_dict, disp_dict = self.model_fn(self.model, batch) #def model_fn(model, data): in train_funtions.py
 
         loss.backward()
         clip_grad_norm_(self.model.parameters(), self.grad_norm_clip)
@@ -185,7 +185,7 @@ class Trainer(object):
 
                 # train one epoch
                 for cur_it, batch in enumerate(train_loader):
-                    if lr_scheduler_each_iter:
+                    if lr_scheduler_each_iter: # True in default setting with adam onecycle
                         self.lr_scheduler.step(it)
                         cur_lr = float(self.optimizer.lr)
                         self.tb_log.add_scalar('learning_rate', cur_lr, it)

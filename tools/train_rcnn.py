@@ -60,6 +60,7 @@ def create_logger(log_file):
 
 def create_dataloader(logger):
     DATA_PATH = os.path.join('../', 'data')
+    DATA_PATH = os.path.join('/mnt/disks/data-drive', 'data')
     # DATA_PATH = os.path.join('/home/cmpe/Disk_500GB_2/', 'data') # lab computer setting
 
     # create dataloader
@@ -93,7 +94,7 @@ def create_optimizer(model):
     elif cfg.TRAIN.OPTIMIZER == 'sgd':
         optimizer = optim.SGD(model.parameters(), lr=cfg.TRAIN.LR, weight_decay=cfg.TRAIN.WEIGHT_DECAY,
                               momentum=cfg.TRAIN.MOMENTUM)
-    elif cfg.TRAIN.OPTIMIZER == 'adam_onecycle':
+    elif cfg.TRAIN.OPTIMIZER == 'adam_onecycle': # default optimizer
         def children(m: nn.Module):
             return list(m.children())
 
@@ -198,7 +199,7 @@ if __name__ == "__main__":
 
     if args.mgpus:
         model = nn.DataParallel(model)
-    model.cuda()
+    model.cuda() # load model on the GPU
 
     # load checkpoint if it is possible
     start_epoch = it = 0
