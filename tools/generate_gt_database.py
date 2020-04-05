@@ -9,6 +9,7 @@ from lib.datasets.kitti_dataset import KittiDataset
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--root_dir', type=str, default='/mnt/disks/data-drive/data/')
 parser.add_argument('--save_dir', type=str, default='./gt_database')
 parser.add_argument('--class_name', type=str, default='Car')
 parser.add_argument('--split', type=str, default='train')
@@ -92,7 +93,7 @@ class GTDatabaseGenerator(KittiDataset):
 
 
 if __name__ == '__main__':
-    dataset = GTDatabaseGenerator(root_dir='../data/', split=args.split)
+    dataset = GTDatabaseGenerator(root_dir=args.root_dir, split=args.split)
     os.makedirs(args.save_dir, exist_ok=True)
 
     dataset.generate_gt_database()
