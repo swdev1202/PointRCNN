@@ -76,7 +76,7 @@ def boxes3d_to_corners3d(boxes3d, rotate=True):
 
     # y_corners = np.zeros((boxes_num, 8), dtype=np.float32)
     # y_corners[:, 4:8] = -h.reshape(boxes_num, 1).repeat(4, axis=1)  # (N, 8)
-    y_corners = np.array([-h / 2., -h / 2., -h / 2., -h / 2., h / 2., h / 2., h / 2., h / 2.], dtype=np.float32).T
+    y_corners = np.array([h / 2., h / 2., h / 2., h / 2., -h / 2., -h / 2., -h / 2., -h / 2.], dtype=np.float32).T # (N, 8)
 
     if rotate:
         ry = boxes3d[:, 6]
@@ -116,7 +116,8 @@ def boxes3d_to_corners3d_torch(boxes3d, flip=False):
     ones = torch.cuda.FloatTensor(boxes_num, 1).fill_(1)
 
     x_corners = torch.cat([l / 2., l / 2., -l / 2., -l / 2., l / 2., l / 2., -l / 2., -l / 2.], dim=1)  # (N, 8)
-    y_corners = torch.cat([zeros, zeros, zeros, zeros, -h, -h, -h, -h], dim=1)  # (N, 8)
+    # y_corners = torch.cat([zeros, zeros, zeros, zeros, -h, -h, -h, -h], dim=1)  # (N, 8)
+    y_corners = torch.cat([h / 2., h / 2., h / 2., h / 2., -h / 2., -h / 2., -h / 2., -h / 2.], dim=1) # (N, 8)
     z_corners = torch.cat([w / 2., -w / 2., -w / 2., w / 2., w / 2., -w / 2., -w / 2., w / 2.], dim=1)  # (N, 8)
     corners = torch.cat((x_corners.unsqueeze(dim=1), y_corners.unsqueeze(dim=1), z_corners.unsqueeze(dim=1)), dim=1) # (N, 3, 8)
 
