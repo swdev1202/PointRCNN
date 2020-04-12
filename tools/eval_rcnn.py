@@ -444,7 +444,7 @@ def eval_one_epoch_rcnn(model, dataloader, epoch_id, result_dir, logger):
         ret_dict['rcnn_recall(thresh=%.2f)' % thresh] = cur_recall
 
     if cfg.TEST.SPLIT != 'test':
-        logger.info('Averate Precision:')
+        logger.info('Average Precision:')
         name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2}
         ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
                                                 current_class=name_to_class[cfg.CLASSES])
