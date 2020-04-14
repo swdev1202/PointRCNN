@@ -20,6 +20,7 @@ from tools.train_utils import learning_schedules_fastai as lsf
 
 
 parser = argparse.ArgumentParser(description="arg parser")
+parser.add_argument('--data_path', type=str, default='../data/')
 parser.add_argument('--cfg_file', type=str, default='cfgs/default.yaml', help='specify the config for training')
 parser.add_argument("--train_mode", type=str, default='rpn', required=True, help="specify the training mode")
 parser.add_argument("--batch_size", type=int, default=16, required=True, help="batch size for training")
@@ -59,8 +60,8 @@ def create_logger(log_file):
 
 
 def create_dataloader(logger):
-    DATA_PATH = os.path.join('../', 'data')
-    # DATA_PATH = os.path.join('/mnt/disks/data-drive/', 'data') #GCP
+    # DATA_PATH = os.path.join('../', 'data')
+    DATA_PATH = args.data_path
 
     # create dataloader
     train_set = KittiRCNNDataset(root_dir=DATA_PATH, npoints=cfg.RPN.NUM_POINTS, split=cfg.TRAIN.SPLIT, mode='TRAIN',
