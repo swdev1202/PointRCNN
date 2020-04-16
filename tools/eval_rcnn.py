@@ -26,6 +26,7 @@ import tqdm
 np.random.seed(1024)  # set the same seed
 
 parser = argparse.ArgumentParser(description="arg parser")
+parser.add_argument('--data_path', type=str, default='./../data/')
 parser.add_argument('--cfg_file', type=str, default='cfgs/default.yml', help='specify the config for evaluation')
 parser.add_argument("--eval_mode", type=str, default='rpn', required=True, help="specify the evaluation mode")
 
@@ -843,7 +844,8 @@ def repeat_eval_ckpt(root_result_dir, ckpt_dir):
 
 def create_dataloader(logger):
     mode = 'TEST' if args.test else 'EVAL'
-    DATA_PATH = os.path.join('..', 'data')
+    # DATA_PATH = os.path.join('..', 'data')
+    DATA_PATH = args.data_path
 
     # create dataloader
     test_set = KittiRCNNDataset(root_dir=DATA_PATH, npoints=cfg.RPN.NUM_POINTS, split=cfg.TEST.SPLIT, mode=mode,
