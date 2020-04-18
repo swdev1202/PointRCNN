@@ -21,6 +21,7 @@ import glob
 import time
 from tensorboardX import SummaryWriter
 import tqdm
+import json
 
 
 np.random.seed(1024)  # set the same seed
@@ -673,7 +674,7 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
         ret_dict['rcnn_recall(thresh=%.2f)' % thresh] = cur_recall
 
     if cfg.TEST.SPLIT != 'test':
-        logger.info('Averate Precision:')
+        logger.info('Average Precision:')
         name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2}
         ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
                                                 current_class=name_to_class[cfg.CLASSES])
@@ -763,8 +764,10 @@ def eval_single_ckpt(root_result_dir):
     load_ckpt_based_on_args(model, logger)
 
     # start evaluation
-    eval_one_epoch(model, test_loader, epoch_id, root_result_dir, logger)
-
+    ret_dict = eval_one_epoch(model, test_loader, epoch_id, root_result_dir, logger)
+    f = open(root_result_dir + 'evaldict.json', 'w')
+    f.write(json.dumps(ret_dict)
+    f.close()
 
 def get_no_evaluated_ckpt(ckpt_dir, ckpt_record_file):
     ckpt_list = glob.glob(os.path.join(ckpt_dir, '*checkpoint_epoch_*.pth'))
