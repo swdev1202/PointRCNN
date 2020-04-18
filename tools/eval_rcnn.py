@@ -765,9 +765,9 @@ def eval_single_ckpt(root_result_dir):
 
     # start evaluation
     ret_dict = eval_one_epoch(model, test_loader, epoch_id, root_result_dir, logger)
-    f = open(root_result_dir + 'evaldict.json', 'w')
-    f.write(json.dumps(ret_dict)
-    f.close()
+    json_file = open(root_result_dir + 'evaldict.json', 'w')
+    json_file.write(json.dumps(ret_dict))
+    json_file.close()
 
 def get_no_evaluated_ckpt(ckpt_dir, ckpt_record_file):
     ckpt_list = glob.glob(os.path.join(ckpt_dir, '*checkpoint_epoch_*.pth'))
